@@ -1,15 +1,24 @@
 const express = require('express');
+const path = require('path');
 const { calculateInvoice } = require('./billing');
 
 const app = express();
 app.use(express.json());
 
-// Healthcheck Route for Deployment Probes
+// 1. Serve static assets
+app.use(express.static(path.join(__dirname, '../public')));
+
+// 2. Explicit Root Route Fallback
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
+// 3. Healthcheck Route
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'UP', timestamp: new Date().toISOString() });
 });
 
-// Client Invoice Calculation Endpoint
+// 4. Invoicing API
 app.post('/api/v1/invoices', (req, res) => {
   try {
     const { items, taxRate } = req.body;
@@ -23,7 +32,7 @@ app.post('/api/v1/invoices', (req, res) => {
 const PORT = process.env.PORT || 3000;
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
-    console.log(`🚀 Client Billing API live on port ${PORT}`);
+    console.log(`🚀 Invoicer live at http://localhost:${PORT}`);
   });
 }
 
