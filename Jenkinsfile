@@ -26,11 +26,8 @@ pipeline {
             steps {
                 echo '🚀 Deploying client application to port 3000...'
                 sh '''
-                    # Stop and remove older version if running
                     docker stop $APP_NAME || true
                     docker rm $APP_NAME || true
-
-                    # Start fresh container instance
                     docker run -d --name $APP_NAME -p $CONTAINER_PORT:3000 $APP_NAME:latest
                 '''
             }
@@ -39,15 +36,15 @@ pipeline {
         stage('Smoke Test Deployment') {
             steps {
                 echo '🔍 Verifying deployment health...'
-                sh 'sleep 3'
-                sh 'curl -f http://localhost:3000/health || exit 1'
+                sh 'sleep 4'
+                sh 'curl -f http://host.docker.internal:3000/health || curl -f http://172.17.0.1:3000/health || exit 1'
             }
         }
     }
 
     post {
         success {
-            echo '🎉 Deployment complete! App is live at http://localhost:3000'
+            echo '🎉 Deployment complete! Invoicer App is live.'
         }
         failure {
             echo '🚨 Build or Test Failed! Pipeline aborted.'
