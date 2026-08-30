@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Invoicing & Billing Portal</title>
+  <link rel="stylesheet" href="/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="brand">
+        <div class="logo">💼</div>
+        <div>
+          <h1>Invoice Generator</h1>
+          <p class="subtitle">Quick Billing & Tax Calculation Portal</p>
+        </div>
+      </div>
+      <div id="system-status" class="status-badge status-loading">Checking API...</div>
+    </header>
+
+    <div class="card">
+      <form id="invoice-form">
+        <div class="form-row header-row">
+          <span class="col-desc">Item Description</span>
+          <span class="col-price">Unit Price (₹)</span>
+          <span class="col-qty">Qty</span>
+          <span class="col-action"></span>
+        </div>
+
+        <div id="items-container"></div>
+
+        <button type="button" id="add-item-btn" class="btn btn-secondary">+ Add Item</button>
+
+        <div class="divider"></div>
+
+        <div class="controls-row">
+          <div class="tax-selector">
+            <label for="tax-rate">Applicable Tax (GST):</label>
+            <select id="tax-rate">
+              <option value="0.05">5% GST</option>
+              <option value="0.12">12% GST</option>
+              <option value="0.18" selected>18% GST (Standard)</option>
+              <option value="0.28">28% GST</option>
+            </select>
+          </div>
+
+          <button type="submit" id="generate-btn" class="btn btn-primary">Generate Invoice</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Invoice Summary Output -->
+    <div id="result-card" class="card result-card hidden">
+      <h2>Invoice Breakdown</h2>
+      <div class="summary-line">
+        <span>Total Items:</span>
+        <strong id="res-items">0</strong>
+      </div>
+      <div class="summary-line">
+        <span>Subtotal:</span>
+        <strong id="res-subtotal">₹0</strong>
+      </div>
+      <div class="summary-line">
+        <span>Tax Amount (<span id="res-tax-rate">0%</span>):</span>
+        <strong id="res-tax">₹0</strong>
+      </div>
+      <div class="divider"></div>
+      <div class="summary-line grand-total">
+        <span>Grand Total:</span>
+        <strong id="res-total">₹0</strong>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
