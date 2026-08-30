@@ -68,7 +68,7 @@ App live at http://localhost:3000
 
 ## 🐳 Docker Deployment
 
-Manual Docker Build & Run
+## Manual Docker Build & Run
 
 ### Build image
 
@@ -131,5 +131,5 @@ POST /api/v1/invoices
     "total": 6990
   }
 }
-👤 Author
-Varun
+## 👤 Author
+### Varun
