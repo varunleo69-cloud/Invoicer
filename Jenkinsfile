@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        APP_NAME = "Invoicer"
+        APP_NAME = "invoicer"
         CONTAINER_PORT = "3000"
     }
 
