@@ -1,24 +1,45 @@
-function calculateInvoice(items, taxRate = 0.18) {
+function calculateInvoice(items, fallbackTaxRate = 0.18) {
   if (!items || items.length === 0) {
     throw new Error("Invoice must contain at least one item.");
   }
 
-  const subtotal = items.reduce((acc, item) => {
+  let subtotal = 0;
+  let totalTax = 0;
+
+  const itemBreakdown = items.map((item) => {
     if (item.price < 0 || item.quantity <= 0) {
       throw new Error("Invalid item price or quantity.");
     }
-    return acc + item.price * item.quantity;
-  }, 0);
 
-  const taxAmount = Math.round(subtotal * taxRate * 100) / 100;
-  const total = Math.round((subtotal + taxAmount) * 100) / 100;
+    const rate = item.taxRate !== undefined ? parseFloat(item.taxRate) : fallbackTaxRate;
+    const itemSubtotal = item.price * item.quantity;
+    const itemTax = Math.round(itemSubtotal * rate * 100) / 100;
+    const itemTotal = Math.round((itemSubtotal + itemTax) * 100) / 100;
+
+    subtotal += itemSubtotal;
+    totalTax += itemTax;
+
+    return {
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      taxRate: `${Math.round(rate * 100)}%`,
+      itemSubtotal,
+      itemTax,
+      itemTotal
+    };
+  });
+
+  subtotal = Math.round(subtotal * 100) / 100;
+  totalTax = Math.round(totalTax * 100) / 100;
+  const grandTotal = Math.round((subtotal + totalTax) * 100) / 100;
 
   return {
     itemCount: items.length,
+    items: itemBreakdown,
     subtotal,
-    taxAmount,
-    taxRate: `${taxRate * 100}%`,
-    total
+    taxAmount: totalTax,
+    total: grandTotal
   };
 }
 

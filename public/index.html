@@ -14,7 +14,7 @@
         <div class="logo">💼</div>
         <div>
           <h1>Invoice Generator</h1>
-          <p class="subtitle">Quick Billing & Tax Calculation Portal</p>
+          <p class="subtitle">Multi-Tier Itemized GST Invoicing Portal</p>
         </div>
       </div>
       <div id="system-status" class="status-badge status-loading">Checking API...</div>
@@ -26,26 +26,16 @@
           <span class="col-desc">Item Description</span>
           <span class="col-price">Unit Price (₹)</span>
           <span class="col-qty">Qty</span>
+          <span class="col-gst">Item GST</span>
           <span class="col-action"></span>
         </div>
 
-        <div id="items-container"></div>
+        <div id="items-container">
+          <!-- Item rows generated dynamically -->
+        </div>
 
-        <button type="button" id="add-item-btn" class="btn btn-secondary">+ Add Item</button>
-
-        <div class="divider"></div>
-
-        <div class="controls-row">
-          <div class="tax-selector">
-            <label for="tax-rate">Applicable Tax (GST):</label>
-            <select id="tax-rate">
-              <option value="0.05">5% GST</option>
-              <option value="0.12">12% GST</option>
-              <option value="0.18" selected>18% GST (Standard)</option>
-              <option value="0.28">28% GST</option>
-            </select>
-          </div>
-
+        <div class="actions-bar">
+          <button type="button" id="add-item-btn" class="btn btn-secondary">+ Add Item</button>
           <button type="submit" id="generate-btn" class="btn btn-primary">Generate Invoice</button>
         </div>
       </form>
@@ -53,17 +43,36 @@
 
     <!-- Invoice Summary Output -->
     <div id="result-card" class="card result-card hidden">
-      <h2>Invoice Breakdown</h2>
+      <h2>Tax Invoice Summary</h2>
+      
+      <table class="invoice-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Rate</th>
+            <th>GST %</th>
+            <th>GST Amt</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="invoice-breakdown-body">
+          <!-- Populated dynamically -->
+        </tbody>
+      </table>
+
+      <div class="divider"></div>
+
       <div class="summary-line">
         <span>Total Items:</span>
         <strong id="res-items">0</strong>
       </div>
       <div class="summary-line">
-        <span>Subtotal:</span>
+        <span>Taxable Subtotal:</span>
         <strong id="res-subtotal">₹0</strong>
       </div>
       <div class="summary-line">
-        <span>Tax Amount (<span id="res-tax-rate">0%</span>):</span>
+        <span>Total GST:</span>
         <strong id="res-tax">₹0</strong>
       </div>
       <div class="divider"></div>
