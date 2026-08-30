@@ -64,21 +64,24 @@ npm test
 ### 3. Start Local Server
 
 npm start
-# App live at http://localhost:3000
+App live at http://localhost:3000
 
 ## 🐳 Docker Deployment
+
 Manual Docker Build & Run
 
-# Build image
+### Build image
+
 docker build -t invoicer:latest .
 
-# Run container
+### Run container
+
 docker run -d --name invoicer -p 3000:3000 invoicer:latest
 
 ## 🔌 API Reference
 
-Healthcheck
-GET /health
+### Healthcheck
+### GET /health
 
 {
   "status": "UP",
@@ -88,7 +91,7 @@ GET /health
 Create Invoice
 POST /api/v1/invoices
 
-Request Body:
+### Request Body:
 
 {
   "items": [
@@ -97,7 +100,7 @@ Request Body:
   ]
 }
 
-Response (201 Created):
+### Response (201 Created):
 
 {
   "success": true,
