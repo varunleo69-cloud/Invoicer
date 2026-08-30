@@ -1,0 +1,17 @@
+{
+  "name": "Invoicer",
+  "version": "1.0.0",
+  "description": "Production client billing and invoice API",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "jest --forceExit --detectOpenHandles"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
+  }
+}
