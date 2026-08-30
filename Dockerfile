@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --production
 
-# Bundle source code and public assets
+# Ensure both src and public are copied
 COPY src/ ./src/
 COPY public/ ./public/
 
