@@ -131,5 +131,3 @@ POST /api/v1/invoices
     "total": 6990
   }
 }
-## 👤 Author
-# - Varun
