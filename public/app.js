@@ -5,6 +5,7 @@ const resultCard = document.getElementById('result-card');
 const statusBadge = document.getElementById('system-status');
 const breakdownBody = document.getElementById('invoice-breakdown-body');
 
+// 1. Health check verification
 async function checkHealth() {
   try {
     const res = await fetch('/health');
@@ -19,11 +20,12 @@ async function checkHealth() {
 }
 checkHealth();
 
-function createItemRow(desc = '', price = '', qty = 1, taxRate = '0.18') {
+// 2. Helper to Create Item Rows
+function createItemRow(desc = '', price = '', qty = '', taxRate = '0.18') {
   const row = document.createElement('div');
   row.className = 'form-row';
   row.innerHTML = `
-    <input type="text" class="col-desc item-name" placeholder="Item Name" value="${desc}" required />
+    <input type="text" class="col-desc item-name" placeholder="Item Description" value="${desc}" required />
     <input type="number" class="col-price item-price" placeholder="Price" min="0" step="any" value="${price}" required />
     <input type="number" class="col-qty item-qty" placeholder="Qty" min="1" value="${qty}" required />
     <select class="col-gst item-tax">
@@ -33,24 +35,31 @@ function createItemRow(desc = '', price = '', qty = 1, taxRate = '0.18') {
       <option value="0.18" ${taxRate === '0.18' ? 'selected' : ''}>18% GST</option>
       <option value="0.28" ${taxRate === '0.28' ? 'selected' : ''}>28% GST</option>
     </select>
-    <button type="button" class="btn-danger remove-btn col-action">✕</button>
+    <button type="button" class="btn-danger remove-btn col-action" title="Delete Row">✕</button>
   `;
 
   row.querySelector('.remove-btn').addEventListener('click', () => {
+    // If it's the last remaining row, just clear its inputs instead of removing the entire row
     if (itemsContainer.children.length > 1) {
       row.remove();
+    } else {
+      row.querySelector('.item-name').value = '';
+      row.querySelector('.item-price').value = '';
+      row.querySelector('.item-qty').value = '';
+      row.querySelector('.item-tax').value = '0.18';
     }
   });
 
   itemsContainer.appendChild(row);
 }
 
-// Initial default rows
-createItemRow('Cloud Server Hosting', 4500, 1, '0.18');
-createItemRow('Technical Documentation (Print)', 800, 2, '0.05');
+// 3. Initialize with a SINGLE, EMPTY row on page load
+createItemRow();
 
+// Add new row button listener
 addItemBtn.addEventListener('click', () => createItemRow());
 
+// 4. Handle Form Submission
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -67,6 +76,11 @@ form.addEventListener('submit', async (e) => {
       items.push({ name, price, quantity, taxRate });
     }
   });
+
+  if (items.length === 0) {
+    alert('Please enter at least one valid item.');
+    return;
+  }
 
   try {
     const response = await fetch('/api/v1/invoices', {
@@ -104,7 +118,7 @@ form.addEventListener('submit', async (e) => {
     } else {
       alert('Error: ' + data.error);
     }
-  } catch {
+  } catch (err) {
     alert('Failed to connect to backend service.');
   }
 });
